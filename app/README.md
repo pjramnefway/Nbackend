@@ -1,0 +1,1 @@
+## remove the file which is added git rm --cached .env
