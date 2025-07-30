@@ -1,7 +1,9 @@
+const bcrypt = require('bcrypt');
 const userModel = require('../models/userModel');
 
 const loginUser = async (req, res) => {
   const { email, password } = req.body;
+  console.log('📥 Login Request:', { email, password });
 
   try {
     if (!email || !password) {
@@ -9,15 +11,18 @@ const loginUser = async (req, res) => {
     }
 
     const user = await userModel.getUserByEmail(email);
+    console.log('🧑‍💻 User from DB:', user);
+    if (!user) return res.status(404).json({ message: 'User not found' });
 
-    if (!user) {
-      return res.status(404).json({ message: 'User not found' });
-    }
+    const isMatch = await bcrypt.compare(password, user.password);
+    console.log('🔐 Password Match:', isMatch);
 
-    // If you're not using bcrypt, use plain comparison (as you're doing)
-    if (user.password !== password) {
-      return res.status(401).json({ message: 'Invalid credentials' });
-    }
+    if (!isMatch) return res.status(401).json({ message: 'Invalid credentials' });
+
+    delete user.password;
+
+    // Create JWT
+    
 
     res.status(200).json({ message: 'Login successful', user });
   } catch (error) {
@@ -25,5 +30,4 @@ const loginUser = async (req, res) => {
     res.status(500).json({ message: 'Internal Server Error' });
   }
 };
-
 module.exports = { loginUser };

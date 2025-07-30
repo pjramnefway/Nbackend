@@ -1,0 +1,59 @@
+flow
+------
+i am building this application for coporate_employees & cabs & drivers here my main aim is to get all the details from driver like complete verfication is done from our side(company)
+1.life insurance will be provided once the driver completes 6 months of his journey with company()
+there are total 6 type of employees are there for this application 
+4 admins
+2 employees
+
+admins
+-------
+company_admin(nefway_admin)
+super_coporate_admin
+coporate_admin
+vendor_admin
+
+employees
+---------
+coporate_employee 
+vendor_employee or vendor_cabs
+
+nefway_admin adds super_coporate_admin
+super_coporate_admin will add coporate_admin & vendor_admin
+
+company_admin will add employees from multiple companies
+
+vendor_admin will add cabs/drivers from multiple travel agencies
+
+
+i am follwoing the mvc pattern folde structure to seperate the code as per the db,middleware,frontend & routes
+
+models
+-------
+database logic
+
+views
+------
+there is no frontend here for this purpose we use ejs as frontend to see the o/p 
+
+controller
+----------
+backend logic 
+
+
+adminLogin
+-----------
+they can login based on role(nefway_admin,super_coporate_admin,coporate_admin,vendor_admin,employees,vendor_cabs_employee)
+
+there is no register because their ids will be created manually & give the credentials to all of them  then we can able to login 
+
+
+
+
+admin table 
+------------
+i have created same table for all admins(users)
+
+super_coporate_admin
+----------------------
+i have created table in db super_coporate_admin

@@ -8,14 +8,14 @@ const createUser = async ({ name, email, password, role, created_by }) => {
     .input('email', mssql.NVarChar(255), email)
     .input('password', mssql.NVarChar(255), password)
     .input('role', mssql.NVarChar(50), role)
-    .input('created_by', mssql.Int, created_by) // ✅ FIXED: was wrongly labeled as 'role'
+    .input('created_by', mssql.Int, created_by) 
     .query(`
       INSERT INTO users (name, email, password, role, created_by)
       OUTPUT INSERTED.id
       VALUES (@name, @email, @password, @role, @created_by)
     `);
 
-  return result.recordset[0].id;
+  return result.recordset[0];
 };
 
 // ✅ getUserByEmail function
