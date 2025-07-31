@@ -11,5 +11,5 @@ router.post('/add-super-admin', upload.fields([
   ]),superCorporateAdminController.createSuperAdmin);
 
 
-  router.get('/super_corporate_admin',superCorporateAdminController.getSuperCoporateAdmin);
+  router.get('/super_corporate_admin',superCorporateAdminController.getSuperCorporateAdmins);
   module.exports = router;

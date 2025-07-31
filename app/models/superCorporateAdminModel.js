@@ -1,59 +1,78 @@
-const {poolPromise,mssql} = require('./db');
+const { poolPromise, mssql } = require('../models/db');
 
-const createSuperCoporateAdmin = async(data)=>
-{
+const createSuperAdmin = async (data) => {
+  try {
+    const {
+      user_id, fullName, username, email, mobile, gender,
+      profilePhoto, designation, companyName, corporateCode,
+      department, officeLocation, access_level, alternateContact,
+      officialEmail, preferredContact, twoFactor, otp,
+      otp_created_at, idProof, corporateIdCard, employeeCode,
+      digitalSignature
+    } = data;
+
     const pool = await poolPromise;
-    const request =  await pool.request();
-        // bind all fields here
-    request.input('user_id', mssql.Int, data.user_id);
-    request.input('fullName', mssql.NVarChar, data.fullName);
-    request.input('username', mssql.NVarChar, data.username);
-    request.input('mobile', mssql.NVarChar, data.mobile);
-    request.input('gender', mssql.NVarChar, data.gender);
-    request.input('profilePhoto', mssql.NVarChar, data.profilePhoto);
-    request.input('designation', mssql.NVarChar, data.designation);
-    request.input('companyName', mssql.NVarChar, data.companyName);
-    request.input('corporateCode', mssql.NVarChar, data.corporateCode);
-    request.input('department', mssql.NVarChar, data.department);
-    request.input('officeLocation', mssql.NVarChar, data.officeLocation);
-    request.input('alternateContact', mssql.NVarChar, data.alternateContact);
-    request.input('officialEmail', mssql.NVarChar, data.officialEmail);
-    request.input('preferredContact', mssql.NVarChar, data.preferredContact);
-    request.input('idProof', mssql.NVarChar, data.idProof);
-    request.input('corporateIdCard', mssql.NVarChar, data.corporateIdCard);
-    request.input('employeeCode', mssql.NVarChar, data.employeeCode);
-    request.input('digitalSignature', mssql.NVarChar, data.digitalSignature);
-    request.input('otp', mssql.NVarChar, data.otp);
-    request.input('twoFactor', mssql.Bit, data.twoFactor);
 
-    await request.query(`
-      INSERT INTO super_corporate_admin (
-        user_id, fullName, username, mobile, gender, profilePhoto, designation,
-        companyName, corporateCode, department, officeLocation,
-        alternateContact, officialEmail, preferredContact,
-        idProof, corporateIdCard, employeeCode, digitalSignature, otp, twoFactor
-      ) VALUES (
-        @user_id, @fullName, @username, @mobile, @gender, @profilePhoto, @designation,
-        @companyName, @corporateCode, @department, @officeLocation,
-        @alternateContact, @officialEmail, @preferredContact,
-        @idProof, @corporateIdCard, @employeeCode, @digitalSignature, @otp, @twoFactor
-      )
-    `);
-}
+    const result = await pool.request()
+      .input('user_id', mssql.Int, user_id)
+      .input('fullName', mssql.NVarChar, fullName)
+      .input('username', mssql.NVarChar, username)
+      .input('email', mssql.NVarChar, email)
+      .input('mobile', mssql.NVarChar, mobile)
+      .input('gender', mssql.NVarChar, gender)
+      .input('profilePhoto', mssql.NVarChar, profilePhoto)
+      .input('designation', mssql.NVarChar, designation)
+      .input('companyName', mssql.NVarChar, companyName)
+      .input('corporateCode', mssql.NVarChar, corporateCode)
+      .input('department', mssql.NVarChar, department)
+      .input('officeLocation', mssql.NVarChar, officeLocation)
+      .input('access_level', mssql.NVarChar, access_level)
+      .input('alternateContact', mssql.NVarChar, alternateContact)
+      .input('officialEmail', mssql.NVarChar, officialEmail)
+      .input('preferredContact', mssql.NVarChar, preferredContact)
+      .input('twoFactor', mssql.Bit, twoFactor)
+      .input('otp', mssql.NVarChar, otp)
+      .input('otp_created_at', mssql.DateTime, otp_created_at || new Date())
+      .input('idProof', mssql.NVarChar, idProof)
+      .input('corporateIdCard', mssql.NVarChar, corporateIdCard)
+      .input('employeeCode', mssql.NVarChar, employeeCode)
+      .input('digitalSignature', mssql.NVarChar, digitalSignature)
+      .query(`
+        INSERT INTO super_corporate_admin (
+          user_id, fullName, username, email, mobile, gender, profilePhoto,
+          designation, companyName, corporateCode, department, officeLocation,
+          access_level, alternateContact, officialEmail, preferredContact,
+          twoFactor, otp, otp_created_at, idProof, corporateIdCard, employeeCode,
+          digitalSignature
+        )
+        VALUES (
+          @user_id, @fullName, @username, @email, @mobile, @gender, @profilePhoto,
+          @designation, @companyName, @corporateCode, @department, @officeLocation,
+          @access_level, @alternateContact, @officialEmail, @preferredContact,
+          @twoFactor, @otp, @otp_created_at, @idProof, @corporateIdCard, @employeeCode,
+          @digitalSignature
+        )
+      `);
 
-const getAllSuperAdmins = async()=>
-{
-  const pool = await poolPromise;
-  const result = await pool.request().query(`  SELECT 
-      u.id, u.email, u.role, u.created_by,
-      s.fullName, s.username, s.mobile, s.designation, s.companyName, s.department,
-      s.officialEmail, s.employeeCode, s.gender, s.profilePhoto, s.idProof, s.digitalSignature
-    FROM users u
-    JOIN super_corporate_admin s ON u.id = s.user_id`)
-      return result.recordset
-}
+    return result.rowsAffected[0];
+  } catch (error) {
+    console.error('❌ Error creating super_corporate_admin:', error);
+    throw error;
+  }
+};
 
+const getAllSuperCorporateAdmins = async () => {
+  try {
+    const pool = await poolPromise;
+    const result = await pool.request().query(`SELECT * FROM super_corporate_admin`);
+    return result.recordset;
+  } catch (error) {
+    console.error('❌ Error fetching super_corporate_admin list:', error);
+    throw error;
+  }
+};
 
-
-module.exports = {createSuperCoporateAdmin,getAllSuperAdmins}
-
+module.exports = {
+  createSuperAdmin,
+  getAllSuperCorporateAdmins
+};
