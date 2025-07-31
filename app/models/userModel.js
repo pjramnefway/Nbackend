@@ -1,4 +1,4 @@
-const { poolPromise, mssql } = require('./db');
+const { poolPromise, mssql } = require('../models/db');
 
 // ✅ Corrected createUser function
 const createUser = async ({ name, email, password, role, created_by }) => {
@@ -15,18 +15,16 @@ const createUser = async ({ name, email, password, role, created_by }) => {
       VALUES (@name, @email, @password, @role, @created_by)
     `);
 
-  return result.recordset[0];
+  return result.recordset[0].id;
 };
 
-// ✅ getUserByEmail function
 const getUserByEmail = async (email) => {
   try {
-    const pool = await poolPromise;
-    const result = await pool.request()
-      .input('email', mssql.NVarChar(255), email)
-      .query(`SELECT * FROM users WHERE email = @email`);
-
-    return result.recordset[0]; // return user object if found
+   const pool = await poolPromise;
+  const result = await pool.request()
+    .input('email', mssql.NVarChar, email)
+    .query('SELECT * FROM users WHERE email = @email');
+  return result.recordset[0];
   } catch (err) {
     console.error('getUserByEmail Error:', err);
     throw err;

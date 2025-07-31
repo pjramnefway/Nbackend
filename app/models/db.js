@@ -1,6 +1,7 @@
 const mssql = require('mssql');
 require('dotenv').config();
 
+// ✅ Database configuration
 const dbConfig = {
   user: process.env.DB_USER,
   password: process.env.DB_PWD,
@@ -12,16 +13,18 @@ const dbConfig = {
   },
 };
 
-// ✅ Use a named async function for better debugging and structure
-const poolPromise = (async () => {
-  try {
-    const pool = await mssql.connect(dbConfig);
-    console.log('✅ Connected to MSSQL');
-    return pool;
-  } catch (err) {
-    console.error('❌ MSSQL Connection Error:', err);
-    throw err;
-  }
-})();
+// ✅ Create and connect the pool
+const pool = new mssql.ConnectionPool(dbConfig);
+const poolPromise = pool.connect(); // Connect once
 
-module.exports = { poolPromise, dbConfig, mssql };
+// ✅ Handle connection errors
+pool.on('error', (err) => {
+  console.error('❌ SQL Pool Error:', err);
+});
+
+// ✅ Export
+module.exports = {
+  poolPromise,
+  dbConfig,
+  mssql,
+};
