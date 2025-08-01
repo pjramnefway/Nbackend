@@ -11,7 +11,7 @@ const createUser = async ({ name, email, password, role, created_by }) => {
     .input('created_by', mssql.Int, created_by) 
     .query(`
       INSERT INTO users (name, email, password, role, created_by)
-      OUTPUT INSERTED.id
+      OUTPUT INSERTED.*
       VALUES (@name, @email, @password, @role, @created_by)
     `);
 

@@ -10,7 +10,7 @@ const createSuperAdmin = async (req, res) => {
     const {
       fullName, username, email, mobile, gender, designation,
       companyName, corporateCode, department, officeLocation,
-      role, password, confirmPassword, otp, twoFactor,
+      access_level, password, confirmPassword, otp, twoFactor,
       alternateContact, officialEmail, preferredContact, employeeCode
     } = req.body;
 
@@ -30,6 +30,7 @@ const createSuperAdmin = async (req, res) => {
     // ✅ Hash password (optional if storing in users table)
     const hashedPassword = await bcrypt.hash(password, 10);
 
+<<<<<<< Updated upstream
     // ✅ Create User record
   // 1. Insert into users table
     const pool = await poolPromise;
@@ -42,13 +43,29 @@ const createSuperAdmin = async (req, res) => {
         VALUES (@email, @password, @role);
         SELECT SCOPE_IDENTITY() AS id;
       `);
+=======
+    // Create User
+    const newUser = await userModel.createUser({
+      name: fullName,
+      email,
+      password: hashedPwd,
+      role:'super_corporate_admin',
+      created_by: req.user?.id || null
+    });
+>>>>>>> Stashed changes
 
 
+<<<<<<< Updated upstream
       const user_id = userResult.recordset[0].id;
 
     // ✅ Create Super Corporate Admin record
     await superCorporateAdminModel.createSuperAdmin({
       user_id,
+=======
+    // Create Super Admin
+    await superCorporateAdminModel.createSuperAdmin({
+      user_id: newUser.id,
+>>>>>>> Stashed changes
       fullName,
       username,
       email,
@@ -66,7 +83,7 @@ const createSuperAdmin = async (req, res) => {
       preferredContact,
       idProof,
       corporateIdCard,
-      employeeCode,
+      employeeCode:req.body.employeeCode,
       digitalSignature,
       otp,
       twoFactor
@@ -86,12 +103,72 @@ const getSuperCorporateAdmins = async (req, res) => {
     const admins = await superCorporateAdminModel.getAllSuperCorporateAdmins();
     res.status(200).json(admins);
   } catch (err) {
+<<<<<<< Updated upstream
     console.error("❌ getSuperCorporateAdmins Error:", err);
+=======
+    //console.error("❌ Error in getSuperCoporateAdmin:", err);
+>>>>>>> Stashed changes
     res.status(500).json({ msg: 'Failed to fetch admins', error: err.message });
   }
 };
 
+<<<<<<< Updated upstream
 module.exports = {
   createSuperAdmin,
   getSuperCorporateAdmins
 };
+=======
+const getById = async (req, res) => {
+  try {
+    const user = await superAdminModel.getSuperAdminById(req.params.id);
+    res.json(user);
+  } catch (err) {
+    console.error('Fetch One Error:', err);
+    res.status(500).json({ message: 'Fetch failed' });
+  }
+};
+
+const update = async (req, res) => {
+  try {
+    await superAdminModel.updateSuperAdmin(req.params.id, req.body);
+    res.json({ message: 'Updated successfully' });
+  } catch (err) {
+    console.error('Update Error:', err);
+    res.status(500).json({ message: 'Update failed' });
+  }
+};
+
+const remove = async (req, res) => {
+  const { id } = req.params;
+  const { reason } = req.body;
+
+  if (!reason || !reason.trim()) {
+    return res.status(400).json({ error: "Deletion reason is required." });
+  }
+
+  try {
+    const pool = await poolPromise;
+
+    // Optional: store deletion reason in a log table
+    await pool.request()
+      .input('user_id', sql.Int, id)
+      .input('reason', sql.NVarChar(sql.MAX), reason)
+      .query(`INSERT INTO deletion_logs (user_id, reason, deleted_at) VALUES (@user_id, @reason, GETDATE())`);
+
+    // Now delete from main table
+    await pool.request()
+      .input('id', sql.Int, id)
+      .query('DELETE FROM super_corporate_admin WHERE id = @id');
+
+    return res.status(200).json({ message: 'User deleted successfully' });
+  } catch (err) {
+    console.error("Delete Error:", err);
+    return res.status(500).json({ error: 'Failed to delete user' });
+  }
+};
+
+
+module.exports = {createSuperAdmin,getSuperCoporateAdmin,getById,update,remove};
+
+
+>>>>>>> Stashed changes
