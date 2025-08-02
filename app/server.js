@@ -3,8 +3,8 @@ require('dotenv').config(); // ✅ Load .env variables
 
 const cors = require('cors');
 const userRouter = require('./routes/userRoute');
-const path = require('path');
 const fs = require('fs');
+const path = require('path');
 
 
 // Initialize Express app
@@ -51,6 +51,19 @@ app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 const superAdminRoutes = require('./routes/superCorporateAdminRoutes');
 app.use('/api', superAdminRoutes);
 app.use('/api/getAll', superAdminRoutes);
+
+
+/* const ejs = require('ejs');
+
+app.set('view engine','ejs');
+app.set('views',path.join(__dirname,'views'))
+
+
+//otproutes
+const otpRouter = require('./routes/otpRoutes');
+app.use('/api',otpRouter);
+
+app.get('/', (req, res) => res.render('otpForm')); */
 
 
 
