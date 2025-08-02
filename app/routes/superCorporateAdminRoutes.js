@@ -11,9 +11,6 @@ router.post('/add-super-admin', upload.fields([
   ]),superCorporateAdminController.createSuperAdmin);
 
 
-<<<<<<< Updated upstream
-  router.get('/super_corporate_admin',superCorporateAdminController.getSuperCorporateAdmins);
-=======
   router.get('/super_corporate_admin',superCorporateAdminController.getSuperCoporateAdmin);
   router.get('/:id',superCorporateAdminController.getById);
   router.put('/:id',superCorporateAdminController.update);
@@ -23,5 +20,4 @@ router.post('/add-super-admin', upload.fields([
 
 
 
->>>>>>> Stashed changes
   module.exports = router;
