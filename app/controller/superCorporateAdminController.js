@@ -20,7 +20,7 @@ const createSuperAdmin = async (req, res) => {
     const corporateIdCard = req.files?.corporateIdCard?.[0]?.filename || null;
     const digitalSignature = req.files?.digitalSignature?.[0]?.filename || null;
 
-    const access_level = role || 'super_admin';
+    //const access_level = role || 'super_admin';
 
     // ✅ Password validation
     if (password !== confirmPassword) {
@@ -30,20 +30,6 @@ const createSuperAdmin = async (req, res) => {
     // ✅ Hash password (optional if storing in users table)
     const hashedPassword = await bcrypt.hash(password, 10);
 
-<<<<<<< Updated upstream
-    // ✅ Create User record
-  // 1. Insert into users table
-    const pool = await poolPromise;
-    const userResult = await pool.request()
-      .input('email', mssql.NVarChar, email)
-      .input('password', mssql.NVarChar, hashedPassword)
-      .input('role', mssql.NVarChar, 'super_corporate_admin')
-      .query(`
-        INSERT INTO users (email, password, role)
-        VALUES (@email, @password, @role);
-        SELECT SCOPE_IDENTITY() AS id;
-      `);
-=======
     // Create User
     const newUser = await userModel.createUser({
       name: fullName,
@@ -52,20 +38,11 @@ const createSuperAdmin = async (req, res) => {
       role:'super_corporate_admin',
       created_by: req.user?.id || null
     });
->>>>>>> Stashed changes
 
 
-<<<<<<< Updated upstream
-      const user_id = userResult.recordset[0].id;
-
-    // ✅ Create Super Corporate Admin record
-    await superCorporateAdminModel.createSuperAdmin({
-      user_id,
-=======
     // Create Super Admin
     await superCorporateAdminModel.createSuperAdmin({
       user_id: newUser.id,
->>>>>>> Stashed changes
       fullName,
       username,
       email,
@@ -103,21 +80,11 @@ const getSuperCorporateAdmins = async (req, res) => {
     const admins = await superCorporateAdminModel.getAllSuperCorporateAdmins();
     res.status(200).json(admins);
   } catch (err) {
-<<<<<<< Updated upstream
-    console.error("❌ getSuperCorporateAdmins Error:", err);
-=======
     //console.error("❌ Error in getSuperCoporateAdmin:", err);
->>>>>>> Stashed changes
     res.status(500).json({ msg: 'Failed to fetch admins', error: err.message });
   }
 };
 
-<<<<<<< Updated upstream
-module.exports = {
-  createSuperAdmin,
-  getSuperCorporateAdmins
-};
-=======
 const getById = async (req, res) => {
   try {
     const user = await superAdminModel.getSuperAdminById(req.params.id);
@@ -168,7 +135,6 @@ const remove = async (req, res) => {
 };
 
 
-module.exports = {createSuperAdmin,getSuperCoporateAdmin,getById,update,remove};
+module.exports = {createSuperAdmin,getSuperCorporateAdmins,getById,update,remove};
 
 
->>>>>>> Stashed changes
