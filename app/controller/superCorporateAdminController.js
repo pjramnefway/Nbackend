@@ -87,7 +87,7 @@ const getSuperCorporateAdmins = async (req, res) => {
 
 const getById = async (req, res) => {
   try {
-    const user = await superAdminModel.getSuperAdminById(req.params.id);
+    const user = await superCorporateAdminModel.getSuperAdminById(req.params.id);
     res.json(user);
   } catch (err) {
     console.error('Fetch One Error:', err);
