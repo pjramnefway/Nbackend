@@ -53,6 +53,11 @@ app.use('/api', superAdminRoutes);
 app.use('/api/getAll', superAdminRoutes);
 
 
+//corporateadmin routes
+const corporateAdminRoutes = require('./routes/corporateAdminRoutes');
+app.use('/api',corporateAdminRoutes);
+app.use('/corporateadmin',corporateAdminRoutes);
+
 /* const ejs = require('ejs');
 
 app.set('view engine','ejs');

@@ -1,15 +1,5 @@
 const { poolPromise, mssql } = require('../models/db');
 
-const createSuperAdmin = async (data) => {
-  try {
-    const {
-      user_id, fullName, username, email, mobile, gender,
-      profilePhoto, designation, companyName, corporateCode,
-      department, officeLocation, access_level, alternateContact,
-      officialEmail, preferredContact, twoFactor, otp,
-      otp_created_at, idProof, corporateIdCard, employeeCode,
-      digitalSignature
-    } = data;
 
 const createSuperAdmin = async(data)=>
 {
