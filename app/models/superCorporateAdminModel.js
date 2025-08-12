@@ -66,7 +66,7 @@ const getAllSuperCorporateAdmins = async () => {
 const getSuperAdminById = async (id) => {
   const pool = await poolPromise;
   const result = await pool.request()
-    .input('id', sql.Int, id)
+    .input('id', mssql.Int, id)
     .query('SELECT * FROM super_corporate_admin WHERE id = @id');
   return result.recordset[0];
 };
@@ -75,11 +75,11 @@ const getSuperAdminById = async (id) => {
 const updateSuperAdmin = async (id, data) => {
   const pool = await poolPromise;
   const result = await pool.request()
-    .input('id', sql.Int, id)
-    .input('fullName', sql.NVarChar, data.fullName)
-    .input('email', sql.NVarChar, data.email)
-    .input('mobile', sql.NVarChar, data.mobile)
-    .input('companyName', sql.NVarChar, data.companyName)
+    .input('id', mssql.Int, id)
+    .input('fullName', mssql.NVarChar, data.fullName)
+    .input('email', mssql.NVarChar, data.email)
+    .input('mobile', mssql.NVarChar, data.mobile)
+    .input('companyName', mssql.NVarChar, data.companyName)
     .query(`
       UPDATE super_corporate_admin SET
       fullName = @fullName,
@@ -95,8 +95,8 @@ const updateSuperAdmin = async (id, data) => {
 const deleteSuperAdmin = async (id, reason) => {
   const pool = await poolPromise;
   const result = await pool.request()
-    .input('id', sql.Int, id)
-    .input('deleteReason', sql.NVarChar, reason)
+    .input('id', mssql.Int, id)
+    .input('deleteReason', mssql.NVarChar, reason)
     .query(`
       DELETE FROM super_corporate_admin WHERE id = @id
     `);
