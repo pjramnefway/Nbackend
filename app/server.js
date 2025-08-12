@@ -49,8 +49,7 @@ app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // ✅ Super Corporate Admin routes
 const superAdminRoutes = require('./routes/superCorporateAdminRoutes');
-app.use('/api', superAdminRoutes);
-app.use('/api/getAll', superAdminRoutes);
+app.use('/api/super-corporate-admin', superAdminRoutes);
 
 
 //corporateadmin routes
@@ -58,22 +57,26 @@ const corporateAdminRoutes = require('./routes/corporateAdminRoutes');
 app.use('/api',corporateAdminRoutes);
 app.use('/corporateadmin',corporateAdminRoutes);
 
-/* const ejs = require('ejs');
 
-app.set('view engine','ejs');
-app.set('views',path.join(__dirname,'views'))
 
 
 //otproutes
 const otpRouter = require('./routes/otpRoutes');
 app.use('/api',otpRouter);
 
+/* const ejs = require('ejs');
+
+app.set('view engine','ejs');
+app.set('views',path.join(__dirname,'views'))
+
+
+
 app.get('/', (req, res) => res.render('otpForm')); */
 
 
 
 // Server setup
-const HOSTNAME = process.env.HOSTNAME || '127.0.0.1';
+const HOSTNAME = process.env.HOSTNAME || '132.156.145.6';
 const PORT = process.env.PORT || 9800;
 
 app.listen(PORT, HOSTNAME, () => {
